@@ -1,27 +1,18 @@
 variable "environment" {
   description = "Development Environment"
   
-  type = object ({
-    name           = string
-  })
-
-  default = {
-    name = "dev"
-  }
+  type = string
+  name = "dev"
 }
 
-variable "firehose_name" {
-  description = "Name of the Kinesis Data Firehose stream"
+variable "s3_bucket_landing_name" {
+  description = "Kinesis Firehose will send data to this bucket"
   type        = string
-  default = {
-    name = "dataeng-firehose-streaming-s3"
-  }
+  name        = "dataeng-landing-zone-us-east-2-kinesis-test"
 }
 
-variable "s3_bucket_name" {
-  description = "Name of the S3 bucket to store the data"
+variable "s3_bucket_output_name" {
+  description = "Glue will store crawler data here"
   type        = string
-  default = {
-    name = "dataeng-landing-zone-us-east-2-kinesis-test"
-  }
+  name        = "dataeng-output-zone-us-east-2-kinesis-test"
 }

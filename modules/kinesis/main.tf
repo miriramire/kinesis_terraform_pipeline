@@ -1,6 +1,13 @@
-module "firehose" {
-  source = "./firehose"
+module "s3_bucket_output" {
+  source = "terraform-aws-modules/s3-bucket/aws"
 
-  firehose_name   = "my-firehose-stream"
-  s3_bucket_name  = "my-s3-bucket"
+  bucket = var.s3_bucket_name
+  acl    = "private"
+}
+
+module "s3_bucket_landing" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = var.s3_bucket_name
+  acl    = "private"
 }
