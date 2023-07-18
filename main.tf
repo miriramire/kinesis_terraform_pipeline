@@ -16,7 +16,7 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose" {
   name        = "dataeng-firehose-streaming-s3"
   destination = "s3"
 
-  s3_configuration = {
+  s3_configuration {
     role_arn = aws_iam_role.firehose_role.arn
     bucket_arn = module.s3_bucket_landing.bucket_arn
     buffer_size = var.firehose_buffer_details.size
