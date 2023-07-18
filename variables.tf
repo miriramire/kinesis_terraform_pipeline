@@ -9,3 +9,17 @@ variable "s3_bucket_output_name" {
   type        = string
   default     = "dataeng-output-zone-us-east-2-kinesis-test"
 }
+
+variable "firehose_buffer_details" {
+  description = "Define buffer details"
+  
+  type = object({
+    size     = number
+    interval = number
+  })
+
+  default = {
+    size     = 1 # MB
+    interval = 60 # seconds
+  }
+}

@@ -11,3 +11,34 @@ module "s3_bucket_landing" {
   bucket = var.s3_bucket_landing_name
   acl    = "private"
 }
+
+resource "aws_kinesis_firehose_delivery_stream" "firehose" {
+  name        = "dataeng-firehose-streaming-s3"
+  destination = "s3"
+
+  s3_configuration = {
+    role_arn = aws_iam_role.firehose_role.arn
+    bucket_arn = module.s3_bucket_landing.bucket_arn
+    buffer_size = var.firehose_buffer_details.size
+    buffer_interval = var.firehose_buffer_details.interval
+  }
+}
+
+resource "aws_iam_role" "firehose_role" {
+  name = "my-firehose-role"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "firehose.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
