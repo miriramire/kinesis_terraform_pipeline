@@ -12,15 +12,20 @@ module "s3_bucket_landing" {
   acl    = "private"
 }
 
-resource "aws_kinesis_firehose_delivery_stream" "firehose" {
+resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
   name        = "dataeng-firehose-streaming-s3"
-  destination = "s3"
+  destination = "extended_s3"
 
-  s3_configuration {
+  extended_s3_configuration {
     role_arn = aws_iam_role.firehose_role.arn
     bucket_arn = module.s3_bucket_landing.bucket_arn
     buffer_size = var.firehose_buffer_details.size
     buffer_interval = var.firehose_buffer_details.interval
+    dynamic_partitioning_configuration {
+      enabled = "true"
+    }
+    prefix              = var.firehose_buffer_details.prefix
+    error_output_prefix = var.firehose_buffer_details.error_output_prefix
   }
 }
 

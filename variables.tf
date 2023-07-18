@@ -14,12 +14,16 @@ variable "firehose_buffer_details" {
   description = "Define buffer details"
   
   type = object({
-    size     = number
-    interval = number
+    size                = number
+    interval            = number
+    prefix              = string
+    error_output_prefix = string
   })
 
   default = {
-    size     = 1 # MB
-    interval = 60 # seconds
+    size                = 1 # MB
+    interval            = 60 # seconds
+    prefix              = "streaming/!{timestamp:yyyy/MM/}"
+    error_output_prefix = "!{firehose:error-output-type}/!{timestamp:yyyy/MM/}"
   }
 }
