@@ -17,10 +17,10 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
   destination = "extended_s3"
 
   extended_s3_configuration {
-    role_arn = aws_iam_role.firehose_role.arn
-    bucket_arn = module.s3_bucket_landing.bucket_arn
-    buffer_size = var.firehose_buffer_details.size
-    buffer_interval = var.firehose_buffer_details.interval
+    role_arn           = aws_iam_role.firehose_role.arn
+    bucket_arn         = module.s3_bucket_landing.s3_bucket_arn
+    buffering_size     = var.firehose_buffer_details.size
+    buffering_interval = var.firehose_buffer_details.interval
     dynamic_partitioning_configuration {
       enabled = "true"
     }
