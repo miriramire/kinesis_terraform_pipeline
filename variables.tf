@@ -14,6 +14,7 @@ variable "firehose_buffer_details" {
   description = "Define buffer details"
   
   type = object({
+    name                = string
     size                = number
     interval            = number
     prefix              = string
@@ -21,9 +22,22 @@ variable "firehose_buffer_details" {
   })
 
   default = {
+    name                = "dataeng-firehose-streaming-s3-test"
     size                = 1 # MB
     interval            = 60 # seconds
     prefix              = "streaming/!{timestamp:yyyy/MM/}"
     error_output_prefix = "!{firehose:error-output-type}/!{timestamp:yyyy/MM/}"
   }
+}
+
+variable "glue_details" {
+  type = object({
+    crawler_name         = string
+    database_name        = string
+  })
+
+  crawler_name = "dataeng-streaming-crawler-test"
+
+  database_name = "streaming-db-test"
+  
 }

@@ -15,8 +15,8 @@ module "s3_bucket_landing" {
 
 # Kinesis Firehose
 resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
-  name        = "dataeng-firehose-streaming-s3"
-  destination = "extended_s3"
+  name        = var.firehose_buffer_details.name
+  destination = "extended_s3" # s3 Deprecated, use extended_s3 instead
 
   extended_s3_configuration {
     role_arn           = aws_iam_role.firehose_role.arn
@@ -24,7 +24,8 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     buffering_size     = var.firehose_buffer_details.size
     buffering_interval = var.firehose_buffer_details.interval
     dynamic_partitioning_configuration {
-      enabled = "true"
+      enabled        = "true"
+      retry_duration = 300
     }
     prefix              = var.firehose_buffer_details.prefix
     error_output_prefix = var.firehose_buffer_details.error_output_prefix
@@ -50,13 +51,13 @@ resource "aws_iam_role" "firehose_role" {
 
 # AWS Glue database
 resource "aws_glue_catalog_database" "streaming_database" {
-  name = "streaming-db"
+  name = var.glue_details.database_name
 }
 
 # AWS Glue Crawler
 resource "aws_glue_crawler" "streaming_crawler" {
   database_name   = aws_glue_catalog_database.streaming_database.name
-  name            = "dataeng-streaming-crawler"
+  name            = var.glue_details.crawler_name
   role            = aws_iam_role.glue_crawler_role.arn
   s3_target {
     path = module.s3_bucket_landing.s3_bucket_arn
