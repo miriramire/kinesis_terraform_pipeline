@@ -35,9 +35,9 @@ variable "glue_details" {
     crawler_name         = string
     database_name        = string
   })
+  default = {
+    crawler_name = "dataeng-streaming-crawler-test"
 
-  crawler_name = "dataeng-streaming-crawler-test"
-
-  database_name = "streaming-db-test"
-  
+    database_name = "streaming-db-test"
+  }
 }
