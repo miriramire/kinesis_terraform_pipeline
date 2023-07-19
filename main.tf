@@ -60,7 +60,8 @@ resource "aws_glue_crawler" "streaming_crawler" {
   name            = var.glue_details.crawler_name
   role            = aws_iam_role.glue_crawler_role.arn
   s3_target {
-    path = module.s3_bucket_landing.s3_bucket_arn
+    #path = module.s3_bucket_landing.s3_bucket_arn
+    path = module.s3_bucket_landing.s3_bucket_id
   }
 }
 
