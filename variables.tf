@@ -25,8 +25,8 @@ variable "firehose_buffer_details" {
     name                = "dataeng-firehose-streaming-s3-test"
     size                = 1 # MB
     interval            = 60 # seconds
-    prefix              = "streaming/${firehose:random-string}/!{timestamp:yyyy/MM/}"
-    error_output_prefix = "!{firehose:error-output-type}/${firehose:random-string}/!{timestamp:yyyy/MM/}"
+    prefix              = "streaming/!{firehose:random-string}/!{timestamp:yyyy/MM/}"
+    error_output_prefix = "!{firehose:error-output-type}/!{firehose:random-string}/!{timestamp:yyyy/MM/}"
   }
 }
 
