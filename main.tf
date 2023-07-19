@@ -1,3 +1,4 @@
+# S3 buckets
 module "s3_bucket_output" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
@@ -12,6 +13,7 @@ module "s3_bucket_landing" {
   acl    = "private"
 }
 
+# Kinesis Firehose
 resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
   name        = "dataeng-firehose-streaming-s3"
   destination = "extended_s3"
@@ -46,4 +48,44 @@ resource "aws_iam_role" "firehose_role" {
   ]
 }
 EOF
+}
+
+# AWS Glue database
+resource "aws_glue_catalog_database" "streaming_database" {
+  name = "streaming-db"
+}
+
+# AWS Glue Crawler
+resource "aws_glue_crawler" "streaming_crawler" {
+  name            = "dataeng-streaming-crawler"
+  role            = aws_iam_role.glue_crawler_role.arn
+  database_name   = aws_glue_catalog_database.streaming_database.name
+  targets {
+    s3_targets {
+      path = module.s3_bucket_landing.s3_bucket_arn
+    }
+  }
+}
+
+resource "aws_iam_role" "glue_crawler_role" {
+  name = "glue-crawler-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "glue.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_role_policy_attachment" "glue_crawler_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+  role       = aws_iam_role.glue_crawler_role.name
 }
