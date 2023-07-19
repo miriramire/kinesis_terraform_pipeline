@@ -60,10 +60,8 @@ resource "aws_glue_crawler" "streaming_crawler" {
   name            = "dataeng-streaming-crawler"
   role            = aws_iam_role.glue_crawler_role.arn
   database_name   = aws_glue_catalog_database.streaming_database.name
-  targets {
-    s3_targets {
-      path = module.s3_bucket_landing.s3_bucket_arn
-    }
+  s3_targets {
+    path = module.s3_bucket_landing.s3_bucket_arn
   }
 }
 
