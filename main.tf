@@ -1,11 +1,4 @@
 # S3 buckets
-module "s3_bucket_output" {
-  source = "terraform-aws-modules/s3-bucket/aws"
-
-  bucket = var.s3_bucket_output_name
-  acl    = "private"
-}
-
 module "s3_bucket_landing" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
@@ -23,12 +16,15 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     bucket_arn         = module.s3_bucket_landing.s3_bucket_arn
     buffering_size     = var.firehose_buffer_details.size
     buffering_interval = var.firehose_buffer_details.interval
-    dynamic_partitioning_configuration {
-      enabled        = "true"
-      retry_duration = 300
-    }
+    #dynamic_partitioning_configuration {
+    #  enabled        = "true"
+    #  retry_duration = 300
+    #}
     prefix              = var.firehose_buffer_details.prefix
     error_output_prefix = var.firehose_buffer_details.error_output_prefix
+  }
+  processing_configuration {
+      enabled = "false"
   }
 }
 

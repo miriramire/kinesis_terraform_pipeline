@@ -4,12 +4,6 @@ variable "s3_bucket_landing_name" {
   default     = "dataeng-landing-zone-us-east-2-kinesis-test"
 }
 
-variable "s3_bucket_output_name" {
-  description = "Glue will store crawler data here"
-  type        = string
-  default     = "dataeng-output-zone-us-east-2-kinesis-test"
-}
-
 variable "firehose_buffer_details" {
   description = "Define buffer details"
   
@@ -25,8 +19,8 @@ variable "firehose_buffer_details" {
     name                = "dataeng-firehose-streaming-s3-test"
     size                = 1 # MB
     interval            = 60 # seconds
-    prefix              = "streaming/!{firehose:random-string}/!{timestamp:yyyy/MM/}"
-    error_output_prefix = "!{firehose:error-output-type}/!{firehose:random-string}/!{timestamp:yyyy/MM/}"
+    prefix              = "streaming/!{timestamp:yyyy/MM/}"
+    error_output_prefix = "!{firehose:error-output-type}/!{timestamp:yyyy/MM/}"
   }
 }
 
