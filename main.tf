@@ -23,9 +23,6 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     prefix              = var.firehose_buffer_details.prefix
     error_output_prefix = var.firehose_buffer_details.error_output_prefix
   }
-  processing_configuration {
-      enabled = "false"
-  }
 }
 
 resource "aws_iam_role" "firehose_role" {
