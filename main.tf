@@ -4,6 +4,9 @@ module "s3_bucket_landing" {
 
   bucket = var.s3_bucket_landing_name
   acl    = "private"
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
 }
 
 # Kinesis Firehose
